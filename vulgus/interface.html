@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Murder Bees</title>
+<link rel="stylesheet" href="beez.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Germania+One&family=Jockey+One&family=Quantico:ital,wght@0,400;0,700;1,400;1,700&family=Texturina:ital,opsz,wght@0,12..72,100..900;1,12..72,100..900&display=swap" rel="stylesheet">
+</head>
+
+<body style="margin: 0; padding: 0; display: flex; flex-direction: column;">
+<section id="title">
+    <h1 style=" margin: 0; font-family: 'Jockey One'; font-size: 4rem; padding: 3rem;">Spelling Bee Practice (Diagnostic)</h1>
+</section>
+
+
+<img src="pronounciation.jpg" style="width: 4.5em; height: 4.5em; align-self: center; margin: 1rem;" id="sound">
+<div style="display: flex;flex-direction: row; width:100%;align-items: center; justify-content: center;">
+<button class="options">Get Definition</button>
+<button class="options">Get Origin</button>
+<button class="options">Get Language of Origin</button>
+<button class="options">Get Example</button>
+</div>
+
+<div style="display: flex; flex-direction: column;" id="evilBee">
+    <input placeholder="Type the word you hear" id="try" name="try" style="width: 80%; text-align: center; font-size: 1.6rem; padding: 0.9em; align-self: center;">
+    <button style="align-self: center; padding: 1em; color: white; background-color: black; font-size: 1rem; width: 80%;" type="submit" id="submit">Done</button>
+</div>
+<div id="function">
+<button class="phase" id="P1"  value="1">Phase 1</button>
+<button class="phase" id="P2" value="2">Phase 2</button>
+<button class="phase" id="P3" value="3">Phase 3</button>
+</div>
+<section style="display: flex; flex-direction: row; width: 100%;">
+    <div style="background-color: rgb(255, 186, 186); width: 50%; display: flex; flex-direction: column;">
+        <h1 style="font-family: 'Jockey One'; font-size: 3rem; padding:0.5rem; text-align: center;">Incorrect Words</h1>
+        <p id="IW" class="done">
+        </p>
+    </div>
+    <div style="background-color: rgb(189, 255, 189); width: 50%; display: flex; flex-direction: column;">
+        <h1 style="font-family: 'Jockey One'; font-size: 3rem; padding:0.5rem; text-align: center;">Correct Words</h1>
+    <p id="CW" class="done">
+
+    </p>
+</div>
+</section>
+<script src="https://js.puter.com/v2/"></script>
+<script src="bee.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,45 @@
+*{box-sizing: border-box;}
+
+
+#title{
+    background-color: black;
+    color: white;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-weight: bold;
+    padding: 10rem;
+    width: 100%;
+    text-align: center;
+    margin:0;
+    padding: 0;
+}
+
+#function{
+    display: flex;
+    flex-direction: row;
+    height: auto;
+    align-items: center;
+    align-self: center;
+}
+
+.phase{
+    padding: 0.5em;
+    font-size: 1.4rem;
+    width: 9rem;
+color: white;
+background-color: rgb(78, 240, 2);
+margin: 1em;
+font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;}
+
+.done{
+    font-size: 1rem;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.options{
+    padding: 0.3em;
+    background-color: rgb(36, 36, 36);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 1em;
+    margin-left: 5em;
+    color: white;
+    font-size: 1em;
+}
