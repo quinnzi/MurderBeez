@@ -1,2 +1,1 @@
-# MurderBeez
-“If you are distressed by anything external, the pain is not due to the thing itself, but to your estimate of it; and this you have the power to revoke at any moment.” ― Marcus Aurelius, Meditations
+
