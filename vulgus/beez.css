@@ -33,6 +33,7 @@ font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;}
 .done{
     font-size: 1rem;
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 1em;
 }
 .options{
     padding: 0.3em;
@@ -43,3 +44,14 @@ font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;}
     color: white;
     font-size: 1em;
 }
+
+.after{
+      padding: 0.5em;
+    font-size: 1.4rem;
+    width: 9rem;
+color: white;
+background-color: rgb(78, 240, 2);
+margin: 1em;
+font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+display:none; }
+  

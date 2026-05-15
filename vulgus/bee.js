@@ -1,7 +1,7 @@
 
 let chosenPhase = '1'
-let chosenWord 
-
+let chosenWord
+let tr = 0
 
     const B1 = document.getElementById("P1")
     const B2 = document.getElementById("P2")
@@ -54,6 +54,7 @@ async function getword() {
     catch(err){
         console.log(err)
     }
+    tr = 0
     }
  
 async function getResult(event) {
@@ -111,6 +112,19 @@ async function getResult(event) {
         incorrectWords.textContent = saved.INwords
         const correctWords = document.getElementById("CW")
         correctWords.textContent = saved.donewords
+        const bar = document.getElementById("progress")
+        const num = saved.left * 0.025
+        console.log(saved.left)
+        console.log(num)
+        bar.style.width =  `${num}%`
+
+        if(saved.left >= 1){
+            alert("Congrats, you're done!")
+            const SR = document.getElementById("SR")
+            SR.style.display = "block"
+            const difficult = document.getElementById("OD")
+            difficult.style.display = "block"
+        }
         }
 
     catch(err){
@@ -147,11 +161,79 @@ async function getResult(event) {
         audio.play();
     });
     })
-    let dictionaryInfo
-    async function getInfo() {
+
+    async function getInfo(mode) {
     try{
-        const word = chosenWord.replace("/\s/g", "-")
-        const response = await fetch(`/https://freedictionaryapi.com/api/v1/entries/en/${word}`)
+    const res = await fetch(`https://freedictionaryapi.com/api/v1/entries/en/${chosenWord}`)
+    const info = await res.json()
+    if (!res.ok) {
+    throw new Error(`Response status: ${res.status}`)
+        }
+       console.log(info)
+       let tr = 0
+const definition = info.entries[0].senses[0].definition
+console.log(definition)
+let example = info.entries[0].senses[0].examples
+
+
+if(example === " "){
+    example = info.entries[0].senses[0].quotes
+    
+}
+if(!example[0]){
+    example = 'There is no definition yet.'
+}
+if(!(example === " ")){
+    example = example[0] 
+}
+
+const POS = info.entries[0].partOfSpeech
+console.log(chosenWord, definition, example, POS)
+if (tr = 0){
+const response = await fetch("/writer", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({chosenWord, definition, example, POS}),
+})
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`)
+    }}
+}
+    catch(err){
+        console.log(err)
+    }
+    
+    }
+if(mode === 'def')
+{document.getElementById("Definition").textContent = definition
+    tr = 1
+}
+if(mode === 'ex')
+{
+   
+    console.log(example +"this")
+    tr = 1
+    puter.ai.txt2speech(example)
+    .then((audio) => {
+        audio.play();
+    });
+    tr= 1
+    }
+
+
+if(mode === 'POS')
+{document.getElementById("POS").textContent = POS
+ tr = 1
+}
+
+
+  
+async function getoldword() {
+    try{
+        
+        const response = await fetch(`/spaced-repetition`)
         console.log("fetchin")
 
         if (!response.ok) {
@@ -159,15 +241,12 @@ async function getResult(event) {
         }
         console.log("the word")
 
-        const saved = await response.json()
-        const incorrectWords = document.getElementById("IW")
-        incorrectWords.textContent = saved.INwords
-        const correctWords = document.getElementById("CW")
-        correctWords.textContent = saved.donewords
+        chosenWord = await response.text()
+        console.log(chosenWord)
         }
 
     catch(err){
         console.log(err)
     }
     }
- 
+    

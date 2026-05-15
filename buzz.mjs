@@ -30,7 +30,7 @@ let chosenWord
 console.log("trying")
     const wordArray = wordList.split(",")
     chosenWord = wordArray[Math.floor(Math.random() * wordArray.length)]
-    const words = wordList.replace(chosenWord, "")
+    const words = wordList.replace(","+chosenWord, "")
     const done = words.length
     fs.writeFile('Phase1.csv', words)
     console.log("this is")
@@ -55,7 +55,7 @@ let chosenWord
 console.log("trying")
     const wordArray = wordList.split(",")
     chosenWord = wordArray[Math.floor(Math.random() * wordArray.length)]
-    const words = wordList.replace(chosenWord, "")
+    const words = wordList.replace(","+chosenWord, "")
     fs.writeFile('Phase2.csv', words)
     console.log("this is")
     console.log(chosenWord)   
@@ -78,11 +78,12 @@ let chosenWord
 console.log("trying")
     const wordArray = wordList.split(",")
     chosenWord = wordArray[Math.floor(Math.random() * wordArray.length)]
-    const words = wordList.replace(chosenWord, "")
+    const words = wordList.replace(","+chosenWord, "")
     fs.writeFile('Phase3.csv', words)
     console.log("this is")
     console.log(chosenWord)   
-    res.send(chosenWord)   
+    res.send(chosenWord)
+
 
 }
 
@@ -96,9 +97,9 @@ catch(err){
 
 app.post('/left', async (req, res) =>{
      console.log(req.body)
-const wordList = await fs.readFile(`Phase${req.body.phase}.csv`, 'utf-8')
+     const wordList = await fs.readFile(`Phase${req.body.phase}.csv`, 'utf-8')
    
-    const words = wordList.replace(req.body.tried, "")
+    const words = wordList.replace(req.body.tried +",", "")
     fs.writeFile(`Phase${req.body.phase}.csv`, words)
 
     if(req.body.struggle){
@@ -117,11 +118,90 @@ const wordList = await fs.readFile(`Phase${req.body.phase}.csv`, 'utf-8')
 })
 
 app.get('/getWords', async (req, res)=>{
-    const donewords = (await fs.readFile("done.csv", "utf-8")).toString()
-    const INwords = (await fs.readFile("struggle-words.csv", "utf-8")).toString()
-    res.json({donewords, INwords})
+    const donewords = (await fs.readFile("done.csv", "utf-8")).split(",")
+    const INwords = (await fs.readFile("struggle-words.csv", "utf-8")).split(",")
+    
+    const left = (donewords.length + INwords.length)
+    res.json({donewords, INwords, left})
 
 })
+
+app.get("/testing", async  (req, res) =>{
+    const Dict1 = (await fs.readFile("Dict1.csv", "utf-8")).split(",")
+    const Dict2 = (await fs.readFile("Dict2.csv", "utf-8")).split(",")
+    const Dict3 = (await fs.readFile("Dict3.csv", "utf-8")).split(",")
+    const struggles = (await fs.readFile("struggle-words.csv", "utf-8")).split(",")
+    const phase1 = []
+    const phase2 = []
+    const phase3 = []
+    struggles.forEach((value) => {
+        if(Dict1.includes(value)){
+            phase1.push(value+",")
+        }
+         if(Dict2.includes(value)){
+            phase2.push(value+",")
+        }
+         if(Dict3.includes(value)){
+            phase3.push(value+",")
+        }
+    })
+    fs.writeFile("Phase1.csv", phase1)
+    fs.writeFile("Phase2.csv", phase2)
+    fs.writeFile("Phase3.csv", phase3)
+    res.send("Practice Mode Initialized")
+})
+
+app.get("/spaced-repetition", async  (req, res) =>{
+    const wrong = (await fs.readFile("struggle-words.csv", "utf-8")).split(",")
+    const done = (await fs.readFile("done.csv", "utf-8")).split(",")
+    const mess = []
+    for (let i = 0; i < Math.round(wrong.length); i++) {
+    mess.push(wrong[i])
+    }
+
+    for (let i = 0; i < Math.round(done.length * .25); i++) {
+        mess.push(done[Math.floor(Math.random() * (done.length-1))])
+    }
+    const word = mess[Math.floor(Math.random() * mess.length)]
+    
+    res.send(word)
+})
+app.get("/word-list", async (req, res)=>{
+    const wordList = await fs.readFile('Phase1.csv', 'utf-8').split(",")
+    res.json(wordList)
+
+})
+app.post("/writer", async (req, res)=>{
+const word = req.body.chosenWord
+const example = req.body.example
+const POS = req.body.POS
+const definition = req.body.definition
+
+
+const defList = await fs.readFile('def.json')
+const pushee = JSON.parse(defList)
+
+pushee.push({word, definition, example, POS})
+fs.writeFile("def.json", JSON.stringify(pushee))
+res.send("help")
+})
+
+app.get("/reset", async (req, res)=>{
+    const Dict1 = await fs.readFile("Dict1.csv", "utf-8")
+    const Dict2 = await fs.readFile("Dict2.csv", "utf-8")
+    const Dict3 = await fs.readFile("Dict3.csv", "utf-8")
+    const P1 = await fs.writeFile("Phase1.csv", Dict1)
+    const P2 = await fs.writeFile("Phase2.csv", Dict2)
+    const P3 = await fs.writeFile("Phase3.csv", Dict3)
+    
+    await fs.writeFile("done.csv", " ")
+    await fs.writeFile("struggle-words.csv", " ")
+
+    res.send("successfully-reset")
+
+})
+
+
 const PORT = process.env.PORT || 3000 
 
 app.listen(PORT, (err, next)=>{
@@ -129,3 +209,5 @@ app.listen(PORT, (err, next)=>{
     console.log('She might be listening...')
 }
 )
+
+
