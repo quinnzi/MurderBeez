@@ -1,6 +1,10 @@
 *{box-sizing: border-box;}
 
-
+p{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 1.2rem;
+    margin: 3rem;
+}
 #title{
     background-color: black;
     color: white;
@@ -12,8 +16,19 @@
     margin:0;
     padding: 0;
 }
+.title{
+    background-color: black;
+    color: white;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-weight: bold;
+    padding: 10rem;
+    width: 100%;
+    text-align: center;
+    margin:0;
+    padding: 0;
+}
 
-#function{
+.function{
     display: flex;
     flex-direction: row;
     height: auto;
@@ -50,8 +65,16 @@ font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;}
     font-size: 1.4rem;
     width: 9rem;
 color: white;
-background-color: rgb(78, 240, 2);
+background-color: green;
 margin: 1em;
+font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;}
+
+.opt{
+ padding: 1.5em;
+    font-size: 1.4rem;
+color: white;
+
+margin: 2em;
+align-self: center;
 font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-display:none; }
-  
+}

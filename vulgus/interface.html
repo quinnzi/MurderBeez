@@ -13,8 +13,8 @@
 
 <body style="margin: 0; padding: 0; display: flex; flex-direction: column;">
 <section id="title">
-    <h1 style=" margin: 0; font-family: 'Jockey One'; font-size: 4rem; padding: 3rem;"></h1>
-<div style="background-color: aqua; height: 2vh;" id="progress"></div>
+    <h1 style=" margin: 0; font-family: 'Jockey One'; font-size: 4rem; padding: 3rem;">Spelling Bee Practice</h1>
+<div style="background-color: rgb(60, 255, 0); height: 2vh;" id="progress"></div>
 </section>
 
 
@@ -32,12 +32,11 @@
     <input placeholder="Type the word you hear" id="try" name="try" style="width: 80%; text-align: center; font-size: 1.6rem; padding: 0.9em; align-self: center;">
     <button style="align-self: center; padding: 1em; color: white; background-color: black; font-size: 1rem; width: 80%;" type="submit" id="submit">Done</button>
 </div>
-<div id="function">
+<div class="function">
 <button class="phase" id="P1"  value="1">Phase 1</button>
 <button class="phase" id="P2" value="2">Phase 2</button>
 <button class="phase" id="P3" value="3">Phase 3</button>
-<button class="after" id="SR"  style="display: none;">Spaced Repetition</button>
-<button class="after" id="OD"  style="display: none;">Only Struggle</button>
+<button class="after" id="SR"  style="display: none;">The Mixer</button>
 </div>
 <section style="display: flex; flex-direction: row; width: 100%;">
     <div style="background-color: rgb(255, 186, 186); width: 50%; display: flex; flex-direction: column; align-items: center;">
@@ -52,7 +51,11 @@
     </p>
 </div>
 </section>
+<section id="title">
+    <button class="opt" id="R" style="background-color: brown;">Reset Progress</button>
+</section>
 <script src="https://js.puter.com/v2/"></script>
+
 <script src="bee.js"></script>
 </body>
 </html>

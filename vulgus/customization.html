@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Murder Bees</title>
+<link rel="icon" type="image/png" href="/fofo.png?v=3">
+<link rel="stylesheet" href="beez.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Germania+One&family=Jockey+One&family=Quantico:ital,wght@0,400;0,700;1,400;1,700&family=Texturina:ital,opsz,wght@0,12..72,100..900;1,12..72,100..900&display=swap" rel="stylesheet">
+</head>
+
+<body style="margin: 0; padding: 0; display: flex; flex-direction: column;">
+<section id="title">
+    <h1 style=" margin: 0; font-family: 'Jockey One'; font-size: 4rem; padding: 3rem;">Spelling Bee Practice: Customized</h1>
+<div style="background-color: rgb(60, 255, 0); height: 2vh;" id="progress"></div>
+</section>
+
+
+<img src="pronounciation.jpg" style="width: 4.5em; height: 4.5em; align-self: center; margin: 1rem;" id="sound">
+<div style="display: flex;flex-direction: row; width:100%;align-items: center; justify-content: center;">
+<button class="options" onclick="getInfo('def')">Get Definition</button>
+<p id="Definition"></p>
+<button class="options" onclick="getInfo('POS')">Get Part of Speech</button>
+<p id="POS" ></p>
+<button class="options" onclick="getInfo('ex')">Get Example</button>
+<p id="EX"></p>
+</div>
+
+<div style="display: flex; flex-direction: column;" id="evilBee">
+    <input placeholder="Type the word you hear" id="try" name="try" style="width: 80%; text-align: center; font-size: 1.6rem; padding: 0.9em; align-self: center;">
+    <button style="align-self: center; padding: 1em; color: white; background-color: black; font-size: 1rem; width: 80%;" type="submit" id="submit">Done</button>
+</div>
+<div class="function" style="width: 80%; margin-top: 3rem; flex-direction: column;">
+<input style="align-self: center; height:50vh; width: 100%; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 1.3rem; text-align: center;" placeholder="Input A List of Words Separated By Commas" id="list">
+<button style="align-self: center; padding: 1em; color: white; background-color: rgb(8, 43, 25); font-size: 1rem; width: 80%; margin-bottom: 2rem;" type="submit" id="set">Set List</button>
+</div>
+<section style="display: flex; flex-direction: row; width: 100%;">
+    <div style="background-color: rgb(255, 186, 186); width: 50%; display: flex; flex-direction: column; align-items: center;">
+        <h1 style="font-family: 'Jockey One'; font-size: 3rem; padding:0.5rem; text-align: center;">Incorrect Words</h1>
+        <p id="IW" class="done">
+        </p>
+    </div>
+    <div style="background-color: rgb(189, 255, 189); width: 50%; display: flex; flex-direction: column;">
+        <h1 style="font-family: 'Jockey One'; font-size: 3rem; padding:0.5rem; text-align: center;">Correct Words</h1>
+    <p id="CW" class="done">
+
+    </p>
+</div>
+</section>
+<section id="title">
+    <button class="opt" id="R" style="background-color: brown;">Reset Progress</button>
+</section>
+<script src="https://js.puter.com/v2/"></script>
+
+<script>
+let chosenWord 
+    const sound = document.getElementById("sound")
+    sound.addEventListener('click', function(){
+        puter.ai.txt2speech(chosenWord)
+    .then((audio) => {
+        audio.play();
+    });
+
+    })
+async function getword() {
+    try{
+        const response = await fetch(`/customChoosee`)
+        console.log("fetchin")
+
+        if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`)
+        }
+        console.log("the word")
+
+        chosenWord = await response.text()
+        console.log(chosenWord)
+        }
+
+    catch(err){
+        console.log(err)
+    }
+    tr = 0
+    }
+    getword()
+document.getElementById('submit').addEventListener('click', getResult) 
+document.getElementById('set').addEventListener('click', async (event) => {
+    event.preventDefault()
+    const list = document.getElementById('list').value
+     try{
+  const response = await fetch("/custom", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({list}),
+})
+alert("Word List Added!")
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`)
+    }
+  
+    console.log("the word")
+}
+    catch(err){
+    console.log(err)
+    }
+    getword()
+}
+)
+
+async function getResult(event) {
+
+    let struggle
+    const phase = '4'
+    const tried = chosenWord
+
+
+    event.preventDefault
+  const attempt = document.getElementById("try").value
+
+
+  if(attempt === chosenWord.trim()){
+    struggle = false
+    alert('Correct!')
+  }
+  else{
+    struggle = true
+     alert('incorrect! correct spelling:' + chosenWord)
+  }
+  
+  try{
+  const response = await fetch("/left", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({tried, struggle, phase}),
+})
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`)
+    }
+  
+    console.log("the word")
+    
+}
+    catch(err){
+    console.log(err)
+    }
+    getword()
+    getDoneWords()
+}
+
+async function getInfo(mode) {
+    try{
+    const res = await fetch(`https://freedictionaryapi.com/api/v1/entries/en/${chosenWord.trim()}`)
+    const info = await res.json()
+    if (!res.ok) {
+    throw new Error(`Response status: ${res.status}`)
+        }
+       console.log(info)
+
+const definition = info.entries[0].senses[0].definition
+console.log(definition)
+let example = info.entries[0].senses[0].examples
+
+if(example){
+    example = example[0] 
+}
+if(!example){
+    example = 'There is no sentence yet.'
+}
+
+if(example === " "){
+    example = info.entries[0].senses[0].quotes
+    
+}
+
+const POS = info.entries[0].partOfSpeech
+
+if(mode === 'def')
+{document.getElementById("Definition").textContent = definition
+
+}
+if(mode === 'ex')
+{
+  puter.ai.txt2speech(example)
+    .then((audio) => {
+        audio.play();
+    });
+
+}
+
+if(mode === 'POS')
+{document.getElementById("POS").textContent = POS
+
+}
+console.log(chosenWord, definition, example, POS)
+if (tr = 0){
+const response = await fetch("/writer", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({chosenWord, definition, example, POS}),
+})
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`)
+    }}
+}
+    catch(err){
+        console.log(err)
+    }
+    tr = 1
+    }
+    async function getDoneWords() {
+    try{
+        const response = await fetch(`/getWordsA`)
+        console.log("fetchin")
+
+        if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`)
+        }
+        console.log("the word")
+
+        const saved = await response.json()
+        const incorrectWords = document.getElementById("IW")
+        incorrectWords.textContent = saved.INwords
+        const correctWords = document.getElementById("CW")
+        correctWords.textContent = saved.donewords
+        const bar = document.getElementById("progress")
+        const num = (saved.done) * (100/saved.custom)
+        console.log(saved.done)
+        const wordsD = saved.done
+        console.log(num)
+        bar.style.width =  `${num}%`
+
+        if(wordsD === saved.custom){
+        try{
+        const response = await fetch('/only-str')
+        alert("Congrats, you've practiced all the words! " + response.text())
+        
+        }
+        catch(err){
+        console.error(err)
+        }
+        }
+        }
+
+    catch(err){
+        console.log(err)
+    }
+    }
+    getDoneWords()
+</script>
+</body>
+</html>
+

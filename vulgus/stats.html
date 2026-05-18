@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Statistics</title>
+<link rel="icon" type="image/png" href="/fofo.png?v=3">
+<link rel="stylesheet" href="beez.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Germania+One&family=Jockey+One&family=Quantico:ital,wght@0,400;0,700;1,400;1,700&family=Texturina:ital,opsz,wght@0,12..72,100..900;1,12..72,100..900&display=swap" rel="stylesheet">
+</head>
+
+<body style="margin: 0; padding: 0; display: flex; flex-direction: column;">
+<section class="title">
+    <h1 style=" margin: 0; font-family: 'Jockey One'; font-size: 7rem; padding: 3rem;padding-bottom: 0;">Your Statistics</h1>
+    <img src="mimi.png" style="align-self: center; height:30rem; margin-bottom: -11rem;">
+</section>
+<section class="title" style="background-color: rgb(76, 124, 76); border-bottom: black 4px solid;">
+    <h1 style=" margin: 0; font-family: 'Jockey One'; font-size: 3rem; padding: 3rem;" id="countC">Correct Words: </h1>
+    <p id="wordsC"></p>
+</section>
+<section class="title" style="background-color: rgb(187, 112, 112); border-bottom: black 4px solid;">
+    <h1 style=" margin: 0; font-family: 'Jockey One'; font-size: 3rem; padding: 3rem;" id="countW">Wrong Words: </h1>
+    <h2 id="count1">Phase 1: </h2>
+    <p id="phase1-words"></p>
+    <h2 id="count2">Phase 2:</h2>
+    <p id="phase2-words"></p>
+    <h2 id="count3">Phase 3: </h2>
+    <p id="phase3-words"></p>
+</section>
+<section class="title" style="background-color: rgb(101, 90, 122); border-bottom: black 4px solid;">
+    <h1 style=" margin: 0; font-family: 'Jockey One'; font-size: 3rem; padding: 3rem;" id="countS">Common Syllables of the Words You Struggled With: </h1>
+    <p id="Syllables"></p>
+</section>
+<section class="title" style="background-color: rgb(11, 12, 11); border-bottom: black 4px solid; display: flex; flex-direction: column; align-items: center;">
+    <h1 style=" margin: 0; font-family: 'Jockey One'; font-size: 3rem; padding: 3rem;" id="countS">Continue?</h1>
+     <div class="function">
+     <button class="opt" id="R" style="background-color: rgb(128, 0, 0);">Reset?</button>
+     <a href="done.html"><button class="opt" id="Con" value="3" style="background-color: green;">Continue Practicing Words You Missed</button></a>
+     <button class="opt" id="save" value="3" style="background-color: rgb(0, 55, 128);">Save as PDF/Print Your Stats To Save Them.</button>
+     <button class="opt" id="ws" value="3" style="background-color: rgb(55, 0, 128);">Practice Your Own Word List.</button>
+     </div>
+</section>
+<script>
+    async function getStats() {
+    try{
+        const response = await fetch(`/stats`)
+        console.log("fetchin")
+
+        if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`)
+        }
+        console.log("the word")
+
+        const stats = await response.json()
+       document.getElementById("count1").insertAdjacentText("beforeend", stats.HowManyW1)
+       document.getElementById("count2").insertAdjacentText("beforeend", stats.HowManyW2)
+       document.getElementById("count3").insertAdjacentText("beforeend", stats.HowManyW3)
+        document.getElementById("phase1-words").textContent = stats.phase1ard
+        document.getElementById("phase2-words").textContent = stats.phase2
+        document.getElementById("phase3-words").textContent = stats.phase3
+        document.getElementById("Syllables").textContent = stats.noted
+        document.getElementById("wordsC").textContent = stats.C
+       document.getElementById("countS").insertAdjacentText("beforeend", stats.noted.length)
+       document.getElementById("countC").insertAdjacentText("beforeend", stats.HowManyC)
+       document.getElementById("countW").insertAdjacentText("beforeend", stats.HowManyW)
+        }
+        catch(err){
+        console.error(err)
+        }
+     
+    }
+    getStats()
+    document.getElementById("R").addEventListener('click', reset)
+     document.getElementById("Con").addEventListener('click', con)
+
+     async function reset(event) {
+        event.preventDefault()
+     const input = prompt("Are you sure you want to reset your words? Keep in mind this will delete the list of the words you got wrong, and the list of the words you got right.", "Type YES if you're sure you want to reset")
+     if (input === "YES"){
+        try
+        {
+        const response = await fetch(`/reset`)
+        console.log("fetchin")
+        
+
+        if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`)
+        }}
+
+        catch(err){
+            console.log(err)
+        }
+       window.location = '/'
+     }
+    else{
+        alert("reset aborted")
+        }
+     }
+      async function con(event) { 
+        event.preventDefault()
+     const input = prompt("Keep in mind this will delete the list of the words you got wrong, and the list of the words you got right, but will allow you to practice the words you got wrong, or a mix of them.", "Type YES if you're sure you want to take this path")
+     if (input === "YES"){
+         try
+        {
+        const response = await fetch(`/spaced-repetition`)
+        console.log("fetchin")
+        
+
+        if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`)
+        }
+        window.location = '/done.html'
+    }
+
+        catch(err){
+            console.log(err)
+        }
+     }
+    else{
+        alert("reset aborted")
+        }
+     }
+    
+     
+     function save() {
+  window.print();
+}
+document.getElementById("save").addEventListener('click', save)
+
+</script>
+</body>
+</html>
+
